@@ -20,5 +20,64 @@ def train_and_eval():
     print("Train OK:", metrics)
     return metrics
 
+def train_and_save_custom(model_path: str = "models/custom_model.pkl"):
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.pipeline import Pipeline
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, classification_report
+    from pathlib import Path
+    import os
+    import joblib
+    import numpy as np
+    X, y = load_iris(return_X_y=True, as_frame=True)
+    # Cargar el dataset desde el archivo CSV
+    try:
+        df = pd.read_csv("churn-bigml-80.csv")
+    except FileNotFoundError:
+        print("Error: No se encontró el archivo 'churn-bigml-80.csv'")
+        exit()
+
+    numeric_features = [
+    "Account length", "Number vmail messages", "Total day minutes",
+    "Total day calls", "Total day charge", "Total eve minutes",
+    "Total eve calls", "Total eve charge", "Total night minutes",
+    "Total night calls", "Total night charge", "Total intl minutes",
+    "Total intl calls", "Total intl charge", "Customer service calls"
+    ]
+
+    X = df[numeric_features]
+
+    # Convertir la columna objetivo 'Churn' (que es True/False) a números (1/0)
+    # Esto es necesario para que el modelo de regresión logística funcione
+    y = df["Churn"].astype(int)
+    X_train, X_test, y_train, y_test = train_test_split(
+      X, y, test_size=0.2, random_state=42
+    )
+
+    pipe = Pipeline(steps=[
+        ("scaler", StandardScaler()),
+        ("clf", LogisticRegression(max_iter=1000, multi_class="auto", random_state=8888))
+    ])
+
+    pipe.fit(X_train, y_train)
+
+    # Evaluación
+    y_pred = pipe.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {acc:.4f}")
+    print(classification_report(y_test, y_pred))
+
+    Path(os.path.dirname(model_path)).mkdir(parents=True, exist_ok=True)
+    joblib.dump({
+        "pipeline": pipe,
+        "target_names": df["Churn"].unique(),
+        "feature_names": numeric_features
+    }, model_path)
+    print(f"Modelo guardado en: {model_path}")
+    
 if __name__ == "__main__":
-    train_and_eval()
+    #train_and_eval()
+    train_and_save_custom()
