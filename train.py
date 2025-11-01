@@ -12,23 +12,23 @@ import os
 import joblib
 import numpy as np
 
-def train_and_eval():
-    iris = load_iris(as_frame=True)
-    X, y = iris.data, iris.target
-    Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=42)
-    clf = LogisticRegression(max_iter=1000).fit(Xtr, ytr)
-    yhat = clf.predict(Xte)
-    metrics = {
-        "accuracy": float(accuracy_score(yte, yhat)),
-        "f1_macro": float(f1_score(yte, yhat, average="macro")),
-        "classes": list(iris.target_names)
-    }
-    bundle = {"model": clf, "target_names": iris.target_names.tolist()}
-    save_model_bundle(bundle)
-    print("Train OK:", metrics)
-    return metrics
+# def train_and_eval():
+#     iris = load_iris(as_frame=True)
+#     X, y = iris.data, iris.target
+#     Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=42)
+#     clf = LogisticRegression(max_iter=1000).fit(Xtr, ytr)
+#     yhat = clf.predict(Xte)
+#     metrics = {
+#         "accuracy": float(accuracy_score(yte, yhat)),
+#         "f1_macro": float(f1_score(yte, yhat, average="macro")),
+#         "classes": list(iris.target_names)
+#     }
+#     bundle = {"model": clf, "target_names": iris.target_names.tolist()}
+#     save_model_bundle(bundle)
+#     print("Train OK:", metrics)
+#     return metrics
     
-def train_and_save_custom():
+def train_and_save():
     # Cargar el dataset desde el archivo CSV
     try:
         df = pd.read_csv("churn-bigml-80.csv")
@@ -86,4 +86,4 @@ def train_and_save_custom():
     print(f"Modelo guardado en: {model_path}")
 
 if __name__ == "__main__":
-    train_and_eval_custom()
+    train_and_eval()
