@@ -3,6 +3,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score
 from model_utils import save_model_bundle
+import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, classification_report
+from pathlib import Path
+import os
+import joblib
+import numpy as np
 
 def train_and_eval():
     iris = load_iris(as_frame=True)
@@ -21,17 +29,7 @@ def train_and_eval():
     return metrics
     
 def train_and_save_custom(model_path: str = "models/custom_model.pkl"):
-    import pandas as pd
-    from sklearn.model_selection import train_test_split
-    from sklearn.pipeline import Pipeline
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.pipeline import Pipeline
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.metrics import accuracy_score, classification_report
-    from pathlib import Path
-    import os
-    import joblib
-    import numpy as np
+
     X, y = load_iris(return_X_y=True, as_frame=True)
     # Cargar el dataset desde el archivo CSV
     try:
