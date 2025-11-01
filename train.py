@@ -28,9 +28,7 @@ def train_and_eval():
     print("Train OK:", metrics)
     return metrics
     
-def train_and_save_custom(model_path: str = "models/custom_model.pkl"):
-
-    X, y = load_iris(return_X_y=True, as_frame=True)
+def train_and_save_custom():
     # Cargar el dataset desde el archivo CSV
     try:
         df = pd.read_csv("churn-bigml-80.csv")
@@ -54,11 +52,22 @@ def train_and_save_custom(model_path: str = "models/custom_model.pkl"):
     X_train, X_test, y_train, y_test = train_test_split(
       X, y, test_size=0.2, random_state=42
     )
+    clf = LogisticRegression(max_iter=1000, multi_class="auto", random_state=8888)
+    # pipe = Pipeline(steps=[
+    #     ("scaler", StandardScaler()),
+    #     ("clf", LogisticRegression(max_iter=1000, multi_class="auto", random_state=8888))
+    # ])
+    yhat = clf.predict(X_test)
+    metrics = {
+        "accuracy": float(accuracy_score(y_test, y_train)),
+        "f1_macro": float(f1_score(y_test, y_train, average="macro")),
+        "classes": df["Churn"].unique().tolist()
+    }
+    bundle = {"model": clf, "target_names": iris.target_names.tolist()}
+    save_model_bundle(bundle)
+    print("Train OK:", metrics)
+    return metrics
 
-    pipe = Pipeline(steps=[
-        ("scaler", StandardScaler()),
-        ("clf", LogisticRegression(max_iter=1000, multi_class="auto", random_state=8888))
-    ])
 
     pipe.fit(X_train, y_train)
 
