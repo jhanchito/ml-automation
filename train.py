@@ -28,7 +28,7 @@ import numpy as np
 #     print("Train OK:", metrics)
 #     return metrics
     
-def train_and_save():
+def train_and_eval():
     # Cargar el dataset desde el archivo CSV
     try:
         df = pd.read_csv("churn-bigml-80.csv")
