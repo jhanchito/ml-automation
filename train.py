@@ -19,7 +19,7 @@ def train_and_eval():
     save_model_bundle(bundle)
     print("Train OK:", metrics)
     return metrics
-
+    
 def train_and_save_custom(model_path: str = "models/custom_model.pkl"):
     import pandas as pd
     from sklearn.model_selection import train_test_split
@@ -77,7 +77,6 @@ def train_and_save_custom(model_path: str = "models/custom_model.pkl"):
         "feature_names": numeric_features
     }, model_path)
     print(f"Modelo guardado en: {model_path}")
-    
+
 if __name__ == "__main__":
-    #train_and_eval()
-    train_and_save_custom()
+    train_and_eval_custom()
