@@ -59,8 +59,8 @@ def train_and_eval():
     # ])
     y_pred = clf.predict(X_test)
     metrics = {
-        "accuracy": float(accuracy_score(y_test, y_train)),
-        "f1_macro": float(f1_score(y_test, y_train, average="macro")),
+        "accuracy": float(accuracy_score(y_test, y_pred)),
+        "f1_macro": float(f1_score(y_test, y_pred, average="macro")),
         "classes": df["Churn"].unique().tolist()
     }
     bundle = {"model": clf, "target_names": df["Churn"].unique().tolist()}
